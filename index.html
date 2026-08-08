@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metagame Set Survey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="header-inner">
+    <div class="title-row">
+      <h1>Metagame <span class="tally-mark">Set</span> Survey</h1>
+      <span class="progress-label" id="progress-label">0 / 0 Pokémon logged</span>
+    </div>
+    <nav class="tabs">
+      <button class="tab-btn active" data-panel="survey-panel">Survey</button>
+      <button class="tab-btn" data-panel="tally-panel">Team Tally Tool</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ SURVEY PANEL ============ -->
+  <section id="survey-panel" class="panel active">
+    <div class="toolbar">
+      <input type="search" id="search" placeholder="Search Pokémon…">
+      <button class="btn secondary" id="clear-btn">Clear all counts</button>
+    </div>
+    <div class="grid" id="pokemon-grid"></div>
+  </section>
+
+  <!-- ============ TALLY PANEL ============ -->
+  <section id="tally-panel" class="panel">
+    <p class="helper-text">
+      Paste one or more Pokémon Showdown team exports below (the standard <code>Pokémon @ Item</code> format).
+      This tool just counts how many times each Pokémon + item combination appears — it's a quick side utility
+      and separate from the named-set survey on the left tab.
+    </p>
+    <div class="tally-layout">
+      <div>
+        <textarea id="tally-input" placeholder="Cresselia @ Leftovers
+Ability: Levitate
+EVs: 252 HP / 252 Def / 4 SpD
+...
+
+Paste as many teams back-to-back as you like."></textarea>
+        <div class="toolbar" style="margin-top:10px;">
+          <button class="btn" id="tally-run-btn">Analyze</button>
+          <button class="btn secondary" id="tally-clear-btn">Clear</button>
+        </div>
+      </div>
+      <div class="tally-results">
+        <table id="tally-table">
+          <thead><tr><th>Pokémon</th><th>Item</th><th>Count</th></tr></thead>
+          <tbody id="tally-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="footer-bar" id="survey-footer">
+  <span class="status-msg" id="status-msg"></span>
+  <button class="btn secondary" id="export-csv-btn">Export CSV</button>
+  <button class="btn" id="submit-btn">Submit to spreadsheet</button>
+</div>
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

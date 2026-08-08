@@ -1,0 +1,362 @@
+:root {
+  --bg: #F1F0EA;
+  --surface: #FFFFFF;
+  --line: #DEDCD2;
+  --ink: #20222A;
+  --ink-soft: #6C6E68;
+  --navy: #2B3350;
+  --navy-dim: #454E70;
+  --amber: #BD8A2E;
+  --amber-soft: #F4E7CC;
+  --danger: #A8432F;
+  --radius: 10px;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Header ---------- */
+
+header.site {
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 18px 24px 0;
+}
+
+.title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+h1 .tally-mark {
+  color: var(--amber);
+}
+
+.progress-label {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+nav.tabs {
+  display: flex;
+  gap: 4px;
+  margin-top: 14px;
+}
+
+nav.tabs button {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+nav.tabs button.active {
+  color: var(--navy);
+  border-bottom: 2px solid var(--navy);
+}
+
+/* ---------- Layout ---------- */
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+.toolbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+input[type="text"], input[type="search"], input[type="url"], textarea {
+  font-family: var(--font-body);
+  font-size: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: var(--surface);
+  color: var(--ink);
+}
+
+#search {
+  flex: 1;
+  min-width: 200px;
+}
+
+.btn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--navy);
+  background: var(--navy);
+  color: #fff;
+  cursor: pointer;
+}
+
+.btn:hover { background: var(--navy-dim); }
+
+.btn.secondary {
+  background: transparent;
+  color: var(--navy);
+}
+
+.btn.secondary:hover { background: var(--amber-soft); }
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- Grid ---------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+  position: relative;
+}
+
+.card:hover { border-color: var(--navy-dim); }
+
+.card.has-entries { border-color: var(--amber); }
+
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card img.sprite {
+  width: 40px;
+  height: 40px;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+
+.card-name {
+  font-family: var(--font-display);
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.card-count-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--amber);
+  margin-top: 4px;
+}
+
+/* ---------- Expanded set editor ---------- */
+
+.card-expand {
+  grid-column: 1 / -1;
+  background: var(--surface);
+  border: 1px solid var(--navy);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+
+.card-expand-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+}
+
+.card-expand-header img.sprite {
+  width: 48px;
+  height: 48px;
+  image-rendering: pixelated;
+}
+
+.card-expand-header .name {
+  font-family: var(--font-display);
+  font-size: 18px;
+}
+
+.close-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.set-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--line);
+}
+
+.set-row:last-child { border-bottom: none; }
+
+.set-name {
+  font-size: 14px;
+}
+
+.set-row.other-row .set-name {
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+}
+
+.stepper button {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.stepper button:hover { background: var(--amber-soft); }
+
+.stepper input {
+  width: 42px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 4px 2px;
+}
+
+/* ---------- Footer bar ---------- */
+
+.footer-bar {
+  position: sticky;
+  bottom: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.status-msg {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-right: auto;
+}
+
+.status-msg.success { color: #3B7A45; }
+.status-msg.error { color: var(--danger); }
+
+/* ---------- Tally tool ---------- */
+
+.tally-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 780px) {
+  .tally-layout { grid-template-columns: 1fr; }
+}
+
+.tally-layout textarea {
+  width: 100%;
+  height: 420px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  resize: vertical;
+}
+
+.tally-results table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.tally-results th, .tally-results td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tally-results th { color: var(--ink-soft); font-weight: 600; }
+
+.helper-text {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 6px 0 14px;
+}
+
+code {
+  font-family: var(--font-mono);
+  background: var(--amber-soft);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
