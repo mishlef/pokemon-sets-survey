@@ -48,8 +48,60 @@ function pokemonEntryTotal(pokemon) {
 const gridEl = document.getElementById("pokemon-grid");
 const progressLabel = document.getElementById("progress-label");
 
+/* The sprite repo's raw files are keyed by numeric Pokédex ID, not by name, so
+   name-slug URLs 404. Instead we resolve official artwork by name through the
+   live PokeAPI (which does accept name/form slugs like "landorus-therian"),
+   and cache the resulting image URL so it's only fetched once per browser. */
+
+const SPRITE_CACHE_KEY = "pokemon-set-survey-sprite-cache-v1";
+let spriteCache = loadSpriteCache();
+const spriteInFlight = new Set();
+
+// Small grey ring shown until the real artwork loads (or if a lookup fails).
+const FALLBACK_SPRITE = "data:image/svg+xml;utf8," + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><circle cx="20" cy="20" r="16" fill="none" stroke="#cfcdc2" stroke-width="3"/></svg>'
+);
+
+function loadSpriteCache() {
+  try {
+    const raw = localStorage.getItem(SPRITE_CACHE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) { /* ignore corrupt storage */ }
+  return {};
+}
+
+function saveSpriteCache() {
+  try { localStorage.setItem(SPRITE_CACHE_KEY, JSON.stringify(spriteCache)); } catch (e) { /* ignore */ }
+}
+
 function spriteUrl(slug) {
-  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${slug}.png`;
+  if (spriteCache[slug]) return spriteCache[slug];       // known good URL
+  if (spriteCache[slug] === false) return FALLBACK_SPRITE; // known 404, don't retry
+  fetchSprite(slug);
+  return FALLBACK_SPRITE;
+}
+
+async function fetchSprite(slug) {
+  if (spriteInFlight.has(slug)) return;
+  spriteInFlight.add(slug);
+  try {
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${slug}`);
+    if (!res.ok) throw new Error("not found: " + slug);
+    const json = await res.json();
+    const url = json.sprites &&
+      json.sprites.other &&
+      json.sprites.other["official-artwork"] &&
+      json.sprites.other["official-artwork"].front_default;
+    spriteCache[slug] = url || false;
+  } catch (e) {
+    spriteCache[slug] = false;
+  }
+  saveSpriteCache();
+  spriteInFlight.delete(slug);
+  // Update any already-rendered <img> tags for this slug without a full re-render.
+  document.querySelectorAll(`img.sprite[data-slug="${slug}"]`).forEach(img => {
+    img.src = spriteCache[slug] || FALLBACK_SPRITE;
+  });
 }
 
 function renderGrid() {
@@ -77,7 +129,7 @@ function buildCollapsedCard(p) {
   card.className = "card" + (total > 0 ? " has-entries" : "");
   card.innerHTML = `
     <div class="card-top">
-      <img class="sprite" src="${spriteUrl(p.sprite)}" alt="${p.name}" loading="lazy" onerror="this.style.visibility='hidden'">
+      <img class="sprite" data-slug="${p.sprite}" src="${spriteUrl(p.sprite)}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='${FALLBACK_SPRITE}'">
       <div class="card-name">${p.name}</div>
     </div>
     ${total > 0 ? `<div class="card-count-badge">${total} logged</div>` : ""}
@@ -101,7 +153,7 @@ function buildExpandedCard(p) {
   const header = document.createElement("div");
   header.className = "card-expand-header";
   header.innerHTML = `
-    <img class="sprite" src="${spriteUrl(p.sprite)}" alt="${p.name}" onerror="this.style.visibility='hidden'">
+    <img class="sprite" data-slug="${p.sprite}" src="${spriteUrl(p.sprite)}" alt="${p.name}" onerror="this.onerror=null;this.src='${FALLBACK_SPRITE}'">
     <div class="name">${p.name}</div>
     <button class="close-btn" aria-label="Close">×</button>
   `;
