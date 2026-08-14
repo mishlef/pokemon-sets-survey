@@ -9,7 +9,7 @@ const POKEMON_DATA = [
   { name: "Metagross", sprite: "metagross", sets: ["Scarf", "Assault Vest", "Endure Weakness Policy", "Band", "Air Balloon", "Occa"] },
   { name: "Spectrier", sprite: "spectrier", sets: ["Life Orb", "Helmet", "Sitrus Taunt", "Disable", "Specs", "Weakness Policy"] },
   { name: "Tapu Fini", sprite: "tapu-fini", sets: ["Scarf", "Wiki", "Leftovers", "Weakness Policy", "Specs", "Sitrus"] },
-  { name: "Darmanitan-Galar", sprite: "darmanitan-galar-standard", sets: ["Scarf", "Band", "Weakness Policy Zen", "Def Invested Choiced"] },
+  { name: "Darmanitan-Galar", sprite: "darmanitan-galarian-standard", sets: ["Scarf", "Band", "Weakness Policy Zen", "Def Invested Choiced"] },
   { name: "Entei", sprite: "entei", sets: ["Pressure Stall", "Assault Vest", "Band"] },
   { name: "Ferrothorn", sprite: "ferrothorn", sets: ["Iron Defense + Body Press", "Band", "Custap"] },
   { name: "Landorus-Therian", sprite: "landorus-therian", sets: ["Assault Vest", "Bulk Up", "Band", "SpDef Band", "Scarf"] },
