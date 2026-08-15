@@ -8,7 +8,7 @@
 //   sets    - the list of common named sets. "Other" is added automatically
 //             by the app — don't list it here.
 const POKEMON_DATA = [
-  { name: "Cresselia", sprite: "cresselia", dexSlug: "cresselia", sets: ["Scarf", "Non-Icy Wind Leftovers", "Icy Wind Leftovers", "Kee"] },
+  { name: "Cresselia", sprite: "test", dexSlug: "cresselia", sets: ["Scarf", "Non-Icy Wind Leftovers", "Icy Wind Leftovers", "Kee"] },
   { name: "Primarina", sprite: "primarina", dexSlug: "primarina", sets: ["Custap", "Sitrus", "Specs", "Pixie Plate", "Wacan", "Mental Herb"] },
   { name: "Celesteela", sprite: "celesteela", dexSlug: "celesteela", sets: ["Custap", "Mental Herb", "Occa", "Sitrus", "Band", "Specs"] },
   { name: "Dragapult", sprite: "dragapult", dexSlug: "dragapult", sets: ["Specs", "Wisp Sub Disable", "Band", "Curse", "Dragon Dance Weakness Policy"] },
