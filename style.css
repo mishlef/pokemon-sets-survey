@@ -312,6 +312,26 @@ input[type="text"], input[type="search"], input[type="url"], textarea {
 .status-msg.success { color: #3B7A45; }
 .status-msg.error { color: var(--danger); }
 
+.team-label {
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+#team-select {
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+}
+
+#team-select.field-error {
+  border-color: var(--danger);
+}
+
 /* ---------- Tally tool ---------- */
 
 .tally-layout {
