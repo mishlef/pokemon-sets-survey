@@ -3,6 +3,7 @@
    ============================================================ */
 
 const STORAGE_KEY = "pokemon-set-survey-state-v1";
+const TEAM_STORAGE_KEY = "pokemon-set-survey-team-v1";
 
 // counts[pokemonName][setName] = integer
 // counts[pokemonName]["__otherLabel"] = free text for what "Other" was
@@ -204,6 +205,31 @@ document.getElementById("clear-btn").addEventListener("click", () => {
 });
 
 /* ============================================================
+   Team selection
+   ============================================================ */
+
+const teamSelect = document.getElementById("team-select");
+teamSelect.value = localStorage.getItem(TEAM_STORAGE_KEY) || "";
+teamSelect.addEventListener("change", () => {
+  localStorage.setItem(TEAM_STORAGE_KEY, teamSelect.value);
+  teamSelect.classList.remove("field-error");
+});
+
+function getSelectedTeam() {
+  return teamSelect.value;
+}
+
+function requireTeamSelected() {
+  if (!getSelectedTeam()) {
+    teamSelect.classList.add("field-error");
+    setStatus("Please select your team before exporting or submitting.", "error");
+    teamSelect.focus();
+    return false;
+  }
+  return true;
+}
+
+/* ============================================================
    CSV export + submission
    ============================================================ */
 
@@ -223,10 +249,10 @@ function buildRows() {
   return rows;
 }
 
-function toCsv(rows) {
-  const header = "pokemon,set,other_note,count";
+function toCsv(rows, team) {
+  const header = "team,pokemon,set,other_note,count";
   const lines = rows.map(r =>
-    [r.pokemon, r.set, r.other_note, r.count]
+    [team, r.pokemon, r.set, r.other_note, r.count]
       .map(v => `"${String(v).replace(/"/g, '""')}"`)
       .join(",")
   );
@@ -234,12 +260,13 @@ function toCsv(rows) {
 }
 
 document.getElementById("export-csv-btn").addEventListener("click", () => {
+  if (!requireTeamSelected()) return;
   const rows = buildRows();
   if (rows.length === 0) {
     setStatus("Nothing logged yet — nothing to export.", "error");
     return;
   }
-  const csv = toCsv(rows);
+  const csv = toCsv(rows, getSelectedTeam());
   const blob = new Blob([csv], { type: "text/csv" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -251,6 +278,7 @@ document.getElementById("export-csv-btn").addEventListener("click", () => {
 });
 
 document.getElementById("submit-btn").addEventListener("click", async () => {
+  if (!requireTeamSelected()) return;
   const rows = buildRows();
   if (rows.length === 0) {
     setStatus("Nothing logged yet — nothing to submit.", "error");
@@ -266,7 +294,7 @@ document.getElementById("submit-btn").addEventListener("click", async () => {
       method: "POST",
       mode: "no-cors", // Apps Script web apps don't return readable CORS headers by default
       headers: { "Content-Type": "text/plain" },
-      body: JSON.stringify({ submitted_at: new Date().toISOString(), rows }),
+      body: JSON.stringify({ submitted_at: new Date().toISOString(), team: getSelectedTeam(), rows }),
     });
     // no-cors means we can't read the response — treat the absence of a thrown error as success
     setStatus(`Submitted ${rows.length} rows. Thank you!`, "success");
