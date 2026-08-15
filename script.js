@@ -298,6 +298,7 @@ document.getElementById("submit-btn").addEventListener("click", async () => {
     });
     // no-cors means we can't read the response — treat the absence of a thrown error as success
     setStatus(`Submitted ${rows.length} rows. Thank you!`, "success");
+    showSubmitModal(rows.length, getSelectedTeam());
   } catch (err) {
     setStatus("Submission failed — check your connection and try again.", "error");
   }
@@ -308,6 +309,30 @@ function setStatus(msg, kind) {
   el.textContent = msg;
   el.className = "status-msg" + (kind ? " " + kind : "");
 }
+
+/* ============================================================
+   Submission confirmation modal
+   ============================================================ */
+
+const submitModal = document.getElementById("submit-modal");
+
+function showSubmitModal(rowCount, team) {
+  document.getElementById("modal-detail").textContent =
+    `${rowCount} row${rowCount === 1 ? "" : "s"} for ${team} ${rowCount === 1 ? "was" : "were"} added to the spreadsheet.`;
+  submitModal.classList.add("visible");
+}
+
+function hideSubmitModal() {
+  submitModal.classList.remove("visible");
+}
+
+document.getElementById("modal-close-btn").addEventListener("click", hideSubmitModal);
+submitModal.addEventListener("click", (e) => {
+  if (e.target === submitModal) hideSubmitModal(); // click on backdrop, not the box
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") hideSubmitModal();
+});
 
 /* ============================================================
    Tabs
